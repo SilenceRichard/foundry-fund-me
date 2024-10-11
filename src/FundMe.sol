@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./PriceConverter.sol";
+import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract FundMe {
     using PriceConverter for uint256;
@@ -11,22 +12,27 @@ contract FundMe {
 
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
+    AggregatorV3Interface private s_priceFeed;
 
     address public immutable i_owner;
 
-    constructor() {
+    constructor(address priceFeed) {
         i_owner = msg.sender;
+        s_priceFeed = AggregatorV3Interface(priceFeed);
     }
 
-    // 123
     function fund() public payable {
         // msg.value wei 18 decimals
         require(
-            msg.value.getConversionRate() > minimumUSD,
+            msg.value.getConversionRate(s_priceFeed) > minimumUSD,
             "Didn't send enough money!"
         );
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
+    }
+
+    function getVersion() public view returns (uint256) {
+        return s_priceFeed.version();
     }
 
     function withdraw() public onlyOwner {
