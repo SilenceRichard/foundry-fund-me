@@ -22,14 +22,7 @@ contract FundMeTest is Test {
         assertEq(fundMe.i_owner(), msg.sender);
     }
 
-    // function testFund() public {
-    //     vm.deal(address(2), 10 ether);
-    //     // addr2 向合约发送 1 ETH
-    //     vm.prank(address(2)); // 模拟 addr2
-    //     fundMe.fund{value: 1 ether}();
-
-    //     // 验证存款金额
-    //     uint256 amountFunded = fundMe.addressToAmountFunded(address(2));
-    //     assertEq(amountFunded, 1 ether);
-    // }
+    function testSepoliaVersionIsFour() public view {
+        assertEq(fundMe.getVersion(), 4);
+    }
 }
