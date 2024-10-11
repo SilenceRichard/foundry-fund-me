@@ -5,9 +5,10 @@ pragma solidity ^0.8.0;
 import "./PriceConverter.sol";
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
+error InsufficientFunds();
+
 contract FundMe {
     using PriceConverter for uint256;
-
     uint256 public constant minimumUSD = 1 * 1e18;
 
     address[] public funders;
@@ -23,10 +24,9 @@ contract FundMe {
 
     function fund() public payable {
         // msg.value wei 18 decimals
-        require(
-            msg.value.getConversionRate(s_priceFeed) > minimumUSD,
-            "Didn't send enough money!"
-        );
+        if (msg.value.getConversionRate(s_priceFeed) <= minimumUSD) {
+            revert InsufficientFunds();
+        }
         funders.push(msg.sender);
         addressToAmountFunded[msg.sender] += msg.value;
     }

@@ -15,7 +15,7 @@ contract HelpConfig is Script {
         address priceFeed;
     }
     uint8 constant DECIMALS = 8;
-    int256 constant PRICE = 2000e8;
+    int256 constant PRICE = 2000e18;
 
     constructor() {
         if (block.chainid == 11155111) {

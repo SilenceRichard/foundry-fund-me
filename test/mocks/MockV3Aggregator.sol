@@ -7,8 +7,8 @@ contract MockV3Aggregator {
     int256 public version;
 
     // 设置价格的小数位数和初始价格
-    constructor(uint8 decimals, int256 initialPrice) {
-        _decimals = decimals;
+    constructor(uint8 __decimals, int256 initialPrice) {
+        _decimals = __decimals;
         price = initialPrice;
         version = 4;
     }
