@@ -10,7 +10,6 @@ error InsufficientFunds();
 contract FundMe {
     using PriceConverter for uint256;
     uint256 public constant minimumUSD = 1 * 1e18;
-
     address[] public funders;
     mapping(address => uint256) public addressToAmountFunded;
     AggregatorV3Interface private s_priceFeed;
@@ -61,6 +60,10 @@ contract FundMe {
     modifier onlyOwner() {
         require(msg.sender == i_owner, "Sorry, you cannot withdraw!");
         _;
+    }
+
+    function getOwner() public view returns (address) {
+        return i_owner;
     }
 
     receive() external payable {
